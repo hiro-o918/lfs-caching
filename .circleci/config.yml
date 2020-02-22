@@ -37,6 +37,7 @@ jobs:
             key: lfs-deps-v1
             paths:
               - ./.lfs-caches
+            force: yes
 
 workflows:
   build-using-caching:
