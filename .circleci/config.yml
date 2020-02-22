@@ -39,7 +39,7 @@ jobs:
         - save_cache:
             key: lfs-deps-v1-{{ checksum "lfs-files.lock" }}
             paths:
-              - ./.lfs-caches
+              - /root/project/.lfs-caches
 
 workflows:
   build-using-caching:

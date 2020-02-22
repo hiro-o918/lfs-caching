@@ -1,4 +1,4 @@
 #!/bin/bash
 CACHE_DIR=.lfs-caches
 
-rsync -a ${CACHE_DIR}/* $(pwd)
+rsync -a $(pwd)/${CACHE_DIR}/* $(pwd)

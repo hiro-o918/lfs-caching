@@ -7,5 +7,5 @@ while read hash star filepath
 do  
     dname=`dirname "${filepath}"`
     mkdir -p ${CACHE_DIR}/${dname}
-    cp -a "${filepath}" "${CACHE_DIR}/${dname}"
+    cp -a "$(pwd)/${filepath}" "$(pwd)/${CACHE_DIR}/${dname}"
 done < lfs-files.lock
