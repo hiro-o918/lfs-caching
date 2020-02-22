@@ -26,7 +26,7 @@ jobs:
             command: |
               git lfs ls-files > ${LOCK_FILE}
         - restore_cache:
-            key: lfs-deps-v1-{{ checksum "lfs-files.lock" }}
+            key: git-lfs-deps-v1-{{ checksum "lfs-files.lock" }}
         - run:
             name: Resore caches from cache directroy and Pull files managed by git-lfs
             command: |
@@ -37,9 +37,10 @@ jobs:
             command: |
               bash scripts/lfs-store.sh
         - save_cache:
-            key: lfs-deps-v1-{{ checksum "lfs-files.lock" }}
+            key: git-lfs-deps-v1-{{ checksum "lfs-files.lock" }}
             paths:
               - /root/project/.lfs-caches
+              - /root/project/.git/lfs
 
 workflows:
   build-using-caching:
