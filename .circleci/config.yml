@@ -7,6 +7,7 @@ jobs:
       environment:
         GITHUB_USER: hiro-o918 
         GITHUB_PROJECT: lfs-caching
+        LOCK_FILE: lfs-files.lock
       steps:
         - checkout
         - run:
@@ -20,24 +21,25 @@ jobs:
               mkdir -p ~/.ssh
               ssh-keyscan -H github.com >> ~/.ssh/known_hosts
               ssh git@github.com git-lfs-authenticate ${GITHUB_USER}/${GITHUB_PROJECT}.git download
+        - run:
+            name: Generate lfs-files.lock
+            command: |
+              git lfs ls-files > ${LOCK_FILE}
         - restore_cache:
-            # everytime restore cache of lfs files
-            key: lfs-deps-v1
+            key: lfs-deps-v1-{{ checksum ${LOCK_FILE} }}
         - run:
             name: Resore caches from cache directroy and Pull files managed by git-lfs
             command: |
               bash scripts/lfs-restore.sh
               git lfs pull
         - run:
-            name: store lfs files to cache directroy
+            name: Store lfs files to cache directroy
             command: |
               bash scripts/lfs-store.sh
         - save_cache:
-          # everytime overwrite cache of lfs files
-            key: lfs-deps-v1
+            key: lfs-deps-v1-{{ checksum ${LOCK_FILE} }}
             paths:
               - ./.lfs-caches
-            force: yes
 
 workflows:
   build-using-caching:
