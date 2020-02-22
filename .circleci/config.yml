@@ -24,7 +24,6 @@ jobs:
         - run:
             name: Generate lfs-files.lock
             command: |
-              raise error
               git lfs ls-files > ${LOCK_FILE}
         - restore_cache:
             key: lfs-deps-v1-{{ checksum "lfs-files.lock" }}
