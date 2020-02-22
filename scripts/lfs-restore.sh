@@ -1,5 +1,9 @@
 #!/bin/bash
 CACHE_DIR=.lfs-caches
-if [ -d "${CASHE_DIR}" ]; then
-    rsync -av ${CACHE_DIR}/ .
-fi
+LOCK_FILE=lfs-files.lock
+
+while read hash star filepath
+do  
+    dname=`dirname "${filepath}"`
+    cp -a "${CACHE_DIR}/${filepath}" "${dname}"
+done < lfs-files.lock
