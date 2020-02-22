@@ -1,0 +1,45 @@
+version: 2.1
+
+jobs:
+  build:
+      docker:
+        - image: debian:stretch 
+      environment:
+        GITHUB_USER: hiro-o918 
+        GITHUB_PROJECT: lfs-caching
+      steps:
+        - checkout
+        - run:
+            name: Install git-lfs
+            command: |
+              apt-get update
+              apt-get -qq install curl ca-certificates
+              curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
+              apt-get update
+              apt-get -qq install git-lfs
+              mkdir -p ~/.ssh
+              ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+              ssh git@github.com git-lfs-authenticate ${GITHUB_USER}/${GITHUB_PROJECT}.git download
+        - restore_cache:
+            # everytime restore cache of lfs files
+            key: lfs-deps-v1
+        - run:
+            name: Resore caches from cache directroy and Pull files managed by git-lfs
+            command: |
+              bash scripts/lfs-restore.sh
+              git lfs pull
+        - run:
+            name: store lfs files to cache directroy
+            command: |
+              bash scripts/lfs-store.sh
+        - save_cache:
+          # everytime overwrite cache of lfs files
+            key: lfs-deps-v1
+            paths:
+              - ./.lfs-caches
+
+workflows:
+  deploy:
+    jobs:
+      - build:
+          name: build using caching
