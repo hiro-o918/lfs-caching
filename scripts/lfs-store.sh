@@ -1,11 +1,13 @@
 #!/bin/bash
 CACHE_DIR=.lfs-caches
 LOCK_FILE=lfs-files.lock
+if [ ! -e ${LOCK_FILE} ]; then
+    git lfs ls-files > ${LOCK_FILE}
+fi
 
-git lfs ls-files > ${LOCK_FILE}
-while read hash star filepath
+while read hash sep filepath
 do  
     dname=`dirname "${filepath}"`
     mkdir -p ${CACHE_DIR}/${dname}
-    cp -a "$(pwd)/${filepath}" "$(pwd)/${CACHE_DIR}/${dname}"
-done < lfs-files.lock
+    cp -a "$(pwd)/${filepath}" "${CACHE_DIR}/${dname}"
+done < ${LOCK_FILE}
