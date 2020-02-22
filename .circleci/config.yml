@@ -21,10 +21,10 @@ jobs:
               mkdir -p ~/.ssh
               ssh-keyscan -H github.com >> ~/.ssh/known_hosts
               ssh git@github.com git-lfs-authenticate ${GITHUB_USER}/${GITHUB_PROJECT}.git download
-              raise error
         - run:
             name: Generate lfs-files.lock
             command: |
+              raise error
               git lfs ls-files > ${LOCK_FILE}
         - restore_cache:
             key: lfs-deps-v1-{{ checksum "lfs-files.lock" }}
