@@ -3,7 +3,7 @@ CACHE_DIR=.lfs-caches
 LOCK_FILE=lfs-files.lock
 
 git lfs ls-files > ${LOCK_FILE}
-while read hash dash filepath
+while read hash star filepath
 do  
     dname=`dirname "${filepath}"`
     mkdir -p ${CACHE_DIR}/${dname}
