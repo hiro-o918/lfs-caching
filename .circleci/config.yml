@@ -39,7 +39,6 @@ jobs:
               - ./.lfs-caches
 
 workflows:
-  deploy:
+  build-using-caching:
     jobs:
-      - build:
-          name: build using caching
+      - build
