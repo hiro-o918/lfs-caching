@@ -1,2 +1,2 @@
 # lfs-caching
-a
+Supports caching of GitLFS files in Circle CI.
